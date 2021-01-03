@@ -34,77 +34,50 @@ AFRAME.registerComponent("terrain-rotation-reader", {
 AFRAME.registerComponent("plane-rotation-reader", {
   schema: {
     speedOfRoation: { type: "number", default: 0 },
+    speedOfAscent: { type: "number", default: 0 },
   },
   init: function () {
-    console.log("Welcome to Virtual Flight !!!");
-  },
-
-  update: function () {
-    // Key Down Event
     window.addEventListener("keydown", (e) => {
-      var planeRotation = this.el.getAttribute("rotation");
-      var body = this.el.body;
-      
+      //get the data from the attributes
+      this.data.speedOfRoation = this.el.getAttribute("rotation");
+      this.data.speedOfAscent = this.el.getAttribute("position");
+
+      var planeRotation = this.data.speedOfRoation;
+      var planePosition = this.data.speedOfAscent;
+
+      //control the attributes with the Arrow Keys
       if (e.key === "ArrowRight") {
-        if (planeRotation.x >= -35 && planeRotation.x <= 30) {
-          body.angularVelocity.set(0, 0, -0.2);
-        } else {
-          body.angularVelocity.set(0, 0, 0);
+        if (planeRotation.x < 10) {
+          planeRotation.x += 0.5;
+          this.el.setAttribute("rotation", planeRotation);
         }
       }
       if (e.key === "ArrowLeft") {
-        if (planeRotation.x <= 35 && planeRotation.x >= -30) {
-          body.angularVelocity.set(0, 0, 0.2);
-        } else {
-          body.angularVelocity.set(0, 0, 0);
+        if (planeRotation.x > -10) {
+          planeRotation.x -= 0.5;
+          this.el.setAttribute("rotation", planeRotation);
         }
       }
       if (e.key === "ArrowUp") {
-        if (planeRotation.z >= -35 && planeRotation.z <= 30) {
-          body.angularVelocity.set(0.2, 0, 0);
-        } else {
-          body.angularVelocity.set(0, 0, 0);
+        if (planeRotation.z < 20) {
+          planeRotation.z += 0.5;
+          this.el.setAttribute("rotation", planeRotation);
+        }
+        if (planePosition.y < 2) {
+          planePosition.y += 0.01;
+          this.el.setAttribute("position", planePosition);
         }
       }
       if (e.key === "ArrowDown") {
-        if (planeRotation.z <= 35 && planeRotation.z >= -30) {
-          body.angularVelocity.set(-0.2, 0, 0);
-        } else {
-          body.angularVelocity.set(0, 0, 0);
+        if (planeRotation.z > -10) {
+          planeRotation.z -= 0.5;
+          this.el.setAttribute("rotation", planeRotation);
+        }
+        if (planePosition.y > -2) {
+          planePosition.y -= 0.01;
+          this.el.setAttribute("position", planePosition);
         }
       }
     });
-
-    // Key Up Event
-    window.addEventListener("keyup", (e) => {
-      const body = this.el.body;
-      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        body.angularVelocity.set(0, 0, 0);
-      }
-      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-        body.angularVelocity.set(0, 0, 0);
-      }
-    });
   },
-  tick: function () {
-    //update the position and velocity in the tick function to avoid the plane falling down because of gravity
-    var body = this.el.body;
-    if (body !== undefined) {
-      // Set velocity to 0.1 to float in the air
-      body.velocity.set(0.1, 0.1, 0.1);
-
-      // Initial position of plane
-      const initPosition = body.initPosition;
-      body.position.set(initPosition.x, initPosition.y, initPosition.z);
-    }
-
-    //GAME OVER
-    var isGameOver = this.el.getAttribute("game-play").isGameOver;
-    if (isGameOver) {
-      this.el.body.velocity.set(-1, -1, -1);
-      const element = document.querySelector("#game_over_text");
-      element.setAttribute("visible", true);
-      return;
-    }
-  }
 });

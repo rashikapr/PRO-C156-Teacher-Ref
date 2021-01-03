@@ -1,79 +1,82 @@
 AFRAME.registerComponent("game-play", {
   schema: {
     elementId: { type: "string", default: "#ring1" },
-    isGameOver: { type: "boolean", default: false }
   },
-  init: function() {
-    const duration = 60 * 2;
-    const timerEl = document.querySelector("#timer");
+
+  init: function () {
+    var duration = 120;
+    var timerEl = document.querySelector("#timer");
     this.startTimer(duration, timerEl);
   },
-  update: function() {
+
+  update: function () {
     this.isCollided(this.data.elementId);
   },
-  startTimer: function(duration, timerEl) {
-    var timer = duration,
-      minutes,
-      seconds;
-    setInterval(() => {
-      if (timer > 0) {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
 
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+  startTimer: function (duration, timerEl) {
+    var minutes;
+    var seconds;
+
+    setInterval(()=> {
+      if (duration >=0) {
+        minutes = parseInt(duration / 60);
+        seconds = parseInt(duration % 60);
+
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        if (seconds < 10) {
+          seconds = "0" + seconds;
+        }
 
         timerEl.setAttribute("text", {
-          value: minutes + ":" + seconds
+          value: minutes + ":" + seconds,
         });
-        timer--;
-      } else {
-        this.gameOver();
+
+        duration -= 1;
+      } 
+      else {
+        this.gameOver();        
       }
-    }, 1000);
+    },1000)
   },
-  isCollided: function(elemntId) {
-    const element = document.querySelector(elemntId);
-    element.addEventListener("collide", e => {
+  isCollided: function (elemntId) {
+    var element = document.querySelector(elemntId);
+    element.addEventListener("collide", (e) => {
       if (elemntId.includes("#ring")) {
         element.setAttribute("visible", false);
-        this.playPowerUpSound();
         this.updateScore();
         this.updateTargets();
-      } else {
+      } 
+      else {
         this.gameOver();
       }
     });
   },
-  updateScore: function() {
-    const element = document.querySelector("#score");
-    let currentScore = parseInt(element.getAttribute("text").value);
-    currentScore += 50;
-    element.setAttribute("text", {
-      value: currentScore
-    });
-  },
-  updateTargets: function() {
-    const element = document.querySelector("#targets");
-    let currentTargets = parseInt(element.getAttribute("text").value);
+  updateTargets: function () {
+    var element = document.querySelector("#targets");
+    var count = element.getAttribute("text").value;
+    var currentTargets = parseInt(count);
     currentTargets -= 1;
     element.setAttribute("text", {
-      value: currentTargets
+      value: currentTargets,
     });
   },
-  playPowerUpSound: function() {
-    var entity = document.querySelector("#powerup_sound");
-    entity.components.sound.playSound();
-  },
-  playCrashSound: function() {
-    var entity = document.querySelector("#crash_sound");
-    entity.components.sound.playSound();
-  },
-  gameOver: function() {
-    this.playCrashSound();
-    const planeEl = document.querySelector("#plane_model");
-    planeEl.setAttribute("game-play", {
-      isGameOver: true
+  updateScore: function () {
+    var element = document.querySelector("#score");
+    var count = element.getAttribute("text").value;
+    var currentScore = parseInt(count);
+    currentScore += 50;
+    element.setAttribute("text", {
+      value: currentScore,
     });
-  }
+  },
+  gameOver: function () {
+    var planeEl = document.querySelector("#plane_model");
+    var element = document.querySelector("#game_over_text");
+    element.setAttribute("visible", true);
+    planeEl.setAttribute("dynamic-body", {
+      mass: 1
+    });
+  },
 });

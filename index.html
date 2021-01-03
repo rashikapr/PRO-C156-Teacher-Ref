@@ -2,6 +2,7 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
@@ -27,11 +28,6 @@
           id="plane"
           src="./assets/models/airplane/scene.gltf"
         ></a-asset-item>
-
-        <!--Audio-->
-        <audio id="background" src="./assets/sounds/bg.mp3"></audio>
-        <audio id="powerup" src="./assets/sounds/power_up.mp3"></audio>
-        <audio id="crash" src="./assets/sounds/crash.mp3"></audio>
       </a-assets>
 
       <!-- Terrain  -->
@@ -55,8 +51,8 @@
         scale="1 1 1"
         rotation="0 90 0"
         plane-rotation-reader
+        dynamic-body="mass:0"
         game-play
-        dynamic-body="shape:sphere;sphereRadius:3.5"
       >
       </a-entity>
 
@@ -71,26 +67,26 @@
         <!-- Timer -->
         <a-entity position="-23.5 19.3 0">
           <a-entity
-            position=""
-            text="font: aileronsemibold; width: 14.5; color: black; value: TIME\nREMAINING"
+            position="-1.5 0.07 0"
+            text="font: aileronsemibold; width: 12; color: black; value: TIME\nREMAINING"
           ></a-entity>
           <a-entity
             id="timer"
             position="-9.8 0.3 0"
-            text="font: exo2bold; align: center; width: 40; color: black; value: 00:00"
+            text="font: exo2bold; align: center; width: 30; color: black; value: 00:00"
           ></a-entity>
         </a-entity>
 
         <!-- Traget Status -->
         <a-entity position="-18 19.3 0">
           <a-entity
-            position=""
-            text="font: aileronsemibold; width: 13; color: black; value: TRAGETS\nREMAINING"
+            position="-0.6 0.13 0"
+            text="font: aileronsemibold; width: 12; color: black; value: TRAGETS\nREMAINING"
           ></a-entity>
           <a-entity
             id="targets"
-            position="-7.8 0.3 0"
-            text="font: exo2bold; align: center; width: 40; color: black; value: 30"
+            position="-8 0.3 0"
+            text="font: exo2bold; align: center; width: 30; color: black; value: 20"
           ></a-entity>
         </a-entity>
 
@@ -103,27 +99,18 @@
           <a-entity
             id="score"
             position="0 -2 0"
-            text="font: exo2bold; align: center; width: 55; color: black; value: 0"
+            text="font: exo2bold; align: center; width: 40; color: black; value: 0"
           ></a-entity>
         </a-entity>
       </a-entity>
 
-      <!----------------------------------- Sounds------------------------------------>
-      <a-entity sound="src: #background; autoplay: true; volume: 2;loop:true">
-      </a-entity>
-      <a-entity id="powerup_sound" sound="src: #powerup; volume: 30;">
-      </a-entity>
-      <a-entity id="crash_sound" sound="src: #crash;volume: 30;"> </a-entity>
-
       <!------------------------------------Game Over-------------------------------->
       <a-entity
         id="game_over_text"
-        position="0 0 0"
-        text="font: exo2bold; align: center; width: 155; color: white;value: Game Over !!!"
+        position="0 7.5 0"
+        text="font: exo2bold; align: center; width: 100; color: white;value: Game Over!!!"
         visible="false"
       ></a-entity>
-    
-
     </a-scene>
   </body>
 </html>
