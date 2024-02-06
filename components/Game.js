@@ -71,12 +71,5 @@ AFRAME.registerComponent("game-play", {
       value: currentScore,
     });
   },
-  gameOver: function () {
-    var planeEl = document.querySelector("#plane_model");
-    var element = document.querySelector("#game_over_text");
-    element.setAttribute("visible", true);
-    planeEl.setAttribute("dynamic-body", {
-      mass: 1
-    });
-  },
+  
 });
